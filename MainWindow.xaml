@@ -1,0 +1,62 @@
+﻿<Window x:Class="WpfApp7.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp7"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="1000" Width="1400"
+        MouseLeftButtonDown="Grid_MouseLeftButtonDown" MouseMove="Window_MouseMove" 
+         MouseRightButtonUp="Window_MouseRightButtonUp" TextBlock.FontSize="20">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+
+        <Canvas Name="HallGrid" Grid.Column="1" Background="AliceBlue">
+        </Canvas>
+
+
+
+        <StackPanel>
+            <TextBlock Text="Тип стола"></TextBlock>
+            <ComboBox Name="TableTypeComboBox" Height="40"/>
+            <TextBlock Text="Количество персон"></TextBlock>
+            <ComboBox Name="NumberOfChairsComboBox" Height="40">
+                <ComboBoxItem Content="1 стул"></ComboBoxItem>
+                <ComboBoxItem Content="2 стулa"></ComboBoxItem>
+                <ComboBoxItem Content="3 стулa"></ComboBoxItem>
+                <ComboBoxItem Content="4 стулa"></ComboBoxItem>
+            </ComboBox>
+
+
+            <ListView Name="lw" Height="350" VerticalAlignment="Top" FontSize="24">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                          
+                            <TextBlock Text="{Binding Number}"></TextBlock>
+                            <TextBlock Text=","></TextBlock>
+                            <TextBlock Text="{Binding X}"></TextBlock>
+                            <TextBlock Text=","></TextBlock>
+                            <TextBlock Text="{Binding Y}"></TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <TextBlock Text="Координаты мыши"></TextBlock>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock>X</TextBlock>
+                <TextBlock Name="txtbX"></TextBlock>
+                <TextBlock>Y</TextBlock>
+                <TextBlock Name="txtbY"></TextBlock>
+            </StackPanel>
+            <Button Height="40" Name="AddTableButton" Click="AddTableButton_Click" Content="Добавить стол"></Button>
+            <Button Height="40" Name="DeleteButton" Click="DeleteButton_Click" Content="Очистить все"></Button>
+        </StackPanel>
+    </Grid>
+
+</Window>
