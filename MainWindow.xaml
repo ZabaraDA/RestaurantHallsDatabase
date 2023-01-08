@@ -15,34 +15,49 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
+        <ScrollViewer Grid.Column="1">
 
-        <Canvas Name="HallGrid" Grid.Column="1" Background="AliceBlue">
-        </Canvas>
+            <Canvas Name="HallGrid"  Height="1000">
+            </Canvas>
+        </ScrollViewer>
 
 
 
         <StackPanel>
             <TextBlock Text="Тип стола"></TextBlock>
-            <ComboBox Name="TableTypeComboBox" Height="40"/>
-            <TextBlock Text="Количество персон"></TextBlock>
-            <ComboBox Name="NumberOfChairsComboBox" Height="40">
-                <ComboBoxItem Content="1 стул"></ComboBoxItem>
-                <ComboBoxItem Content="2 стулa"></ComboBoxItem>
-                <ComboBoxItem Content="3 стулa"></ComboBoxItem>
-                <ComboBoxItem Content="4 стулa"></ComboBoxItem>
+            <ComboBox Name="TableTypeComboBox" Height="40" SelectionChanged="ComboBox_SelectionChanged">
+                <ComboBoxItem Content="Все категории"></ComboBoxItem>
+                <ComboBoxItem Content="Круглый"></ComboBoxItem>
+                <ComboBoxItem Content="Квадратный"></ComboBoxItem>
+                <ComboBoxItem Content="Прямоугольный"></ComboBoxItem>
+                <ComboBoxItem Content="Композитный"></ComboBoxItem>
             </ComboBox>
+            <TextBlock Text=" Выберите стол"></TextBlock>
+            <ComboBox Name="TableComboBox" Height="40"/>
+            <StackPanel Name="TiltAngleStackPanel" Visibility="Collapsed">
+                <TextBlock Text="Расположение стола" ></TextBlock>
+                <ComboBox Name="TiltAngleComboBox" Height="40">
+                    <ComboBoxItem Content="Стандарт"></ComboBoxItem>
+                    <ComboBoxItem Content="Диагональ"></ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
+            <TextBlock Text="Количество персон"></TextBlock>
+            <TextBox Name="NumberOfChairsTextBox" Height="40">
+            </TextBox>
 
 
             <ListView Name="lw" Height="350" VerticalAlignment="Top" FontSize="24">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                          
+
                             <TextBlock Text="{Binding Number}"></TextBlock>
                             <TextBlock Text=","></TextBlock>
                             <TextBlock Text="{Binding X}"></TextBlock>
                             <TextBlock Text=","></TextBlock>
                             <TextBlock Text="{Binding Y}"></TextBlock>
+                            <TextBlock Text=","></TextBlock>
+                            <TextBlock Text="{Binding Angle}"></TextBlock>
                         </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
@@ -56,6 +71,8 @@
             </StackPanel>
             <Button Height="40" Name="AddTableButton" Click="AddTableButton_Click" Content="Добавить стол"></Button>
             <Button Height="40" Name="DeleteButton" Click="DeleteButton_Click" Content="Очистить все"></Button>
+            <Button Height="40" Name="SaveHallButton" Content="Сохранить зал" Click="SaveHallButton_Click"></Button>
+
         </StackPanel>
     </Grid>
 

@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище RestaurantHallsDatabaseModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Зал">
+          <Key>
+            <PropertyRef Name="Код" />
+          </Key>
+          <Property Name="Код" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Наименование" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Статус" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ЗалСтол">
+          <Key>
+            <PropertyRef Name="КодЗала" />
+            <PropertyRef Name="КодСтола" />
+          </Key>
+          <Property Name="КодЗала" Type="int" Nullable="false" />
+          <Property Name="КодСтола" Type="int" Nullable="false" />
+          <Property Name="КоординатаX" Type="int" Nullable="false" />
+          <Property Name="КоординатаY" Type="int" Nullable="false" />
+          <Property Name="Диагональ" Type="bit" />
+        </EntityType>
+        <EntityType Name="Стол">
+          <Key>
+            <PropertyRef Name="Код" />
+          </Key>
+          <Property Name="Код" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Наименование" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="ФормаСтола" Type="tinyint" Nullable="false" />
+          <Property Name="Статус" Type="bit" Nullable="false" />
+          <Property Name="КоличествоПерсон" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_ЗалСтол_Зал">
+          <End Role="Зал" Type="Self.Зал" Multiplicity="1" />
+          <End Role="ЗалСтол" Type="Self.ЗалСтол" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Зал">
+              <PropertyRef Name="Код" />
+            </Principal>
+            <Dependent Role="ЗалСтол">
+              <PropertyRef Name="КодЗала" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ЗалСтол_Стол">
+          <End Role="Стол" Type="Self.Стол" Multiplicity="1" />
+          <End Role="ЗалСтол" Type="Self.ЗалСтол" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Стол">
+              <PropertyRef Name="Код" />
+            </Principal>
+            <Dependent Role="ЗалСтол">
+              <PropertyRef Name="КодСтола" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище RestaurantHallsDatabaseModelContainer">
+          <EntitySet Name="Зал" EntityType="Self.Зал" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ЗалСтол" EntityType="Self.ЗалСтол" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Стол" EntityType="Self.Стол" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_ЗалСтол_Зал" Association="Self.FK_ЗалСтол_Зал">
+            <End Role="Зал" EntitySet="Зал" />
+            <End Role="ЗалСтол" EntitySet="ЗалСтол" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ЗалСтол_Стол" Association="Self.FK_ЗалСтол_Стол">
+            <End Role="Стол" EntitySet="Стол" />
+            <End Role="ЗалСтол" EntitySet="ЗалСтол" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="RestaurantHallsDatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Зал">
+          <Key>
+            <PropertyRef Name="Код" />
+          </Key>
+          <Property Name="Код" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Наименование" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Статус" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ЗалСтол" Relationship="Self.FK_ЗалСтол_Зал" FromRole="Зал" ToRole="ЗалСтол" />
+        </EntityType>
+        <EntityType Name="ЗалСтол">
+          <Key>
+            <PropertyRef Name="КодЗала" />
+            <PropertyRef Name="КодСтола" />
+          </Key>
+          <Property Name="КодЗала" Type="Int32" Nullable="false" />
+          <Property Name="КодСтола" Type="Int32" Nullable="false" />
+          <Property Name="КоординатаX" Type="Int32" Nullable="false" />
+          <Property Name="КоординатаY" Type="Int32" Nullable="false" />
+          <Property Name="Диагональ" Type="Boolean" />
+          <NavigationProperty Name="Зал" Relationship="Self.FK_ЗалСтол_Зал" FromRole="ЗалСтол" ToRole="Зал" />
+          <NavigationProperty Name="Стол" Relationship="Self.FK_ЗалСтол_Стол" FromRole="ЗалСтол" ToRole="Стол" />
+        </EntityType>
+        <EntityType Name="Стол">
+          <Key>
+            <PropertyRef Name="Код" />
+          </Key>
+          <Property Name="Код" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Наименование" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ФормаСтола" Type="Byte" Nullable="false" />
+          <Property Name="Статус" Type="Boolean" Nullable="false" />
+          <Property Name="КоличествоПерсон" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="ЗалСтол" Relationship="Self.FK_ЗалСтол_Стол" FromRole="Стол" ToRole="ЗалСтол" />
+        </EntityType>
+        <Association Name="FK_ЗалСтол_Зал">
+          <End Role="Зал" Type="Self.Зал" Multiplicity="1" />
+          <End Role="ЗалСтол" Type="Self.ЗалСтол" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Зал">
+              <PropertyRef Name="Код" />
+            </Principal>
+            <Dependent Role="ЗалСтол">
+              <PropertyRef Name="КодЗала" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ЗалСтол_Стол">
+          <End Role="Стол" Type="Self.Стол" Multiplicity="1" />
+          <End Role="ЗалСтол" Type="Self.ЗалСтол" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Стол">
+              <PropertyRef Name="Код" />
+            </Principal>
+            <Dependent Role="ЗалСтол">
+              <PropertyRef Name="КодСтола" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="RestaurantHallsDatabaseEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Зал" EntityType="Self.Зал" />
+          <EntitySet Name="ЗалСтол" EntityType="Self.ЗалСтол" />
+          <EntitySet Name="Стол" EntityType="Self.Стол" />
+          <AssociationSet Name="FK_ЗалСтол_Зал" Association="Self.FK_ЗалСтол_Зал">
+            <End Role="Зал" EntitySet="Зал" />
+            <End Role="ЗалСтол" EntitySet="ЗалСтол" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ЗалСтол_Стол" Association="Self.FK_ЗалСтол_Стол">
+            <End Role="Стол" EntitySet="Стол" />
+            <End Role="ЗалСтол" EntitySet="ЗалСтол" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище RestaurantHallsDatabaseModelContainer" CdmEntityContainer="RestaurantHallsDatabaseEntities">
+          <EntitySetMapping Name="Зал">
+            <EntityTypeMapping TypeName="RestaurantHallsDatabaseModel.Зал">
+              <MappingFragment StoreEntitySet="Зал">
+                <ScalarProperty Name="Код" ColumnName="Код" />
+                <ScalarProperty Name="Наименование" ColumnName="Наименование" />
+                <ScalarProperty Name="Статус" ColumnName="Статус" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ЗалСтол">
+            <EntityTypeMapping TypeName="RestaurantHallsDatabaseModel.ЗалСтол">
+              <MappingFragment StoreEntitySet="ЗалСтол">
+                <ScalarProperty Name="КодЗала" ColumnName="КодЗала" />
+                <ScalarProperty Name="КодСтола" ColumnName="КодСтола" />
+                <ScalarProperty Name="КоординатаX" ColumnName="КоординатаX" />
+                <ScalarProperty Name="КоординатаY" ColumnName="КоординатаY" />
+                <ScalarProperty Name="Диагональ" ColumnName="Диагональ" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Стол">
+            <EntityTypeMapping TypeName="RestaurantHallsDatabaseModel.Стол">
+              <MappingFragment StoreEntitySet="Стол">
+                <ScalarProperty Name="Код" ColumnName="Код" />
+                <ScalarProperty Name="Наименование" ColumnName="Наименование" />
+                <ScalarProperty Name="ФормаСтола" ColumnName="ФормаСтола" />
+                <ScalarProperty Name="Статус" ColumnName="Статус" />
+                <ScalarProperty Name="КоличествоПерсон" ColumnName="КоличествоПерсон" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
