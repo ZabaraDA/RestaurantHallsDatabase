@@ -434,7 +434,7 @@ namespace WpfApp7
         private void SaveHallButton_Click(object sender, RoutedEventArgs e)
         {
             StringBuilder errors = new StringBuilder();
-            if (tableCoordinatesList == null || tableCoordinatesList.Count == 0 )
+            if (tableCoordinatesList == null | tableCoordinatesList.Count == 0 )
             {
                 errors.AppendLine("Необходимо добавить хотя бы один стол");
             }
