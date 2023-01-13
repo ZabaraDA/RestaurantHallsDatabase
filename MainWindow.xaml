@@ -5,23 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp7"
         mc:Ignorable="d"
-        Title="MainWindow" Height="1000" Width="1400"
+        Title="MainWindow" Height="950" Width="1440"
         MouseLeftButtonDown="Grid_MouseLeftButtonDown" MouseMove="Window_MouseMove" 
-         MouseRightButtonUp="Window_MouseRightButtonUp" TextBlock.FontSize="20">
+         MouseRightButtonUp="Window_MouseRightButtonUp" TextBlock.FontSize="22" WindowStartupLocation="CenterScreen">
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"></ColumnDefinition>
+            <ColumnDefinition Width="250"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
         <ScrollViewer Grid.Column="1">
-
             <Canvas Name="HallGrid"  Height="1000">
             </Canvas>
         </ScrollViewer>
-
-
 
         <StackPanel>
             <TextBlock Text="Тип стола"></TextBlock>
@@ -34,17 +31,10 @@
             </ComboBox>
             <TextBlock Text=" Выберите стол"></TextBlock>
             <ComboBox Name="TableComboBox" Height="40"/>
-            <StackPanel Name="TiltAngleStackPanel" Visibility="Collapsed">
-                <TextBlock Text="Расположение стола" ></TextBlock>
-                <ComboBox Name="TiltAngleComboBox" Height="40">
-                    <ComboBoxItem Content="Стандарт"></ComboBoxItem>
-                    <ComboBoxItem Content="Диагональ"></ComboBoxItem>
-                </ComboBox>
+            <StackPanel Name="TiltAngleStackPanel" >
+                <TextBlock Text="Расположить стол по диагонали" TextWrapping="WrapWithOverflow" ></TextBlock>
+                <CheckBox Name="TiltAngleCheckBox"></CheckBox>
             </StackPanel>
-            <TextBlock Text="Количество персон"></TextBlock>
-            <TextBox Name="NumberOfChairsTextBox" Height="40">
-            </TextBox>
-
 
             <ListView Name="lw" Height="350" VerticalAlignment="Top" FontSize="24">
                 <ListView.ItemTemplate>
@@ -69,10 +59,13 @@
                 <TextBlock>Y</TextBlock>
                 <TextBlock Name="txtbY"></TextBlock>
             </StackPanel>
+            <TextBlock Text="Наименование зала"></TextBlock>
+                <TextBox Name="NameHallTextBox" Height="40"></TextBox>
             <Button Height="40" Name="AddTableButton" Click="AddTableButton_Click" Content="Добавить стол"></Button>
             <Button Height="40" Name="DeleteButton" Click="DeleteButton_Click" Content="Очистить все"></Button>
-            <Button Height="40" Name="SaveHallButton" Content="Сохранить зал" Click="SaveHallButton_Click"></Button>
-
+            <Button Height="40" Name="SaveHallButton" Content="Сохранить шаблон зала" Click="SaveHallButton_Click"></Button>
+            <Button Height="40" Name="ViewHallButton" Content="Просмотр залов" Click="ViewHallButton_Click"></Button>
+            <Button Height="40" Name="ChangeTableButton" Content="Редактирование столов" Click="ChangeTableButton_Click"></Button>
         </StackPanel>
     </Grid>
 

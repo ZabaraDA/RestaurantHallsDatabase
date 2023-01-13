@@ -32,8 +32,7 @@ namespace WpfApp7
 
         bool angleTable;
 
-        List<(int x, int y)> coordinatesList;
-        List<TableParameter> tableCoordinatesList;
+        List<TableParameter> tableCoordinatesList = new List<TableParameter>();
         List<Стол> addedTables = new List<Стол>();
 
         TableParameter tableParameter;
@@ -61,18 +60,10 @@ namespace WpfApp7
         public MainWindow()
         {
             InitializeComponent();
-
-            TiltAngleComboBox.SelectedIndex = 0;
+            var g = databaseEntities.Стол.Where(x => x.Код.Equals(1)).FirstOrDefault();
+            
             TableTypeComboBox.SelectedIndex = 0;
 
-            coordinatesList = new List<(int x, int y)>()
-            {
-                (diameterTable / 2, 0),
-
-                (-diameterTable / 2, 0),
-                (0, diameterTable / 2),
-                (0, -diameterTable / 2)
-            };
         }
 
 
@@ -89,8 +80,10 @@ namespace WpfApp7
 
             if (tableCoordinatesList == null)
             {
-                tableCoordinatesList = new List<TableParameter>();
-                tableCoordinatesList.Add(new TableParameter(quantity, x, y, false) { Number = quantity, X = x, Y = y, Angle = false });
+                tableCoordinatesList = new List<TableParameter>
+                {
+                    new TableParameter(quantity, x, y, false) { Number = quantity, X = x, Y = y, Angle = false }
+                };
             }
             else if (CorrectCoordinates(x, y, diameterTable + indent, tableCoordinatesList) == false)
             {
@@ -311,9 +304,9 @@ namespace WpfApp7
 
             int x = indent, y = indent;
 
-            if (tableCoordinatesList == null)
+            if (tableCoordinatesList.Count == 0)
             {
-                tableCoordinatesList = new List<TableParameter>();
+
                 tableCoordinatesList.Add(new TableParameter(addTable.Код, x, y, false) { Number = addTable.Код, X = x, Y = y, Angle = false });
             }
             else
@@ -375,7 +368,7 @@ namespace WpfApp7
             else if (addTable.ФормаСтола > 1)
             {
                 RotateTransform rotateTransform = new RotateTransform(0);
-                if (TiltAngleComboBox.SelectedIndex == 1)
+                if (TiltAngleCheckBox.IsChecked == true)
                 {
                     rotateTransform = new RotateTransform(45, diameterTable / 2, diameterTable / 2);
                     tableCoordinatesList[tableCoordinatesList.Count - 1].Angle = true;
@@ -400,10 +393,17 @@ namespace WpfApp7
                 VerticalAlignment = VerticalAlignment.Center,
             };
 
-            TextBlock textBlock = new TextBlock()
+            TextBlock nameTextBlock = new TextBlock()
             {
                 Text = addTable.Наименование,
                 HorizontalAlignment = HorizontalAlignment.Center
+            };
+
+            TextBlock numberTextBlock = new TextBlock()
+            {
+                Text = addTable.КоличествоПерсон.ToString() + " гостей",
+                HorizontalAlignment = HorizontalAlignment.Center,
+                FontSize = 12
             };
 
             Button button = new Button()
@@ -416,7 +416,8 @@ namespace WpfApp7
             };
             button.Click += DeleteButton1_Click;
 
-            stackPanel.Children.Add(textBlock);
+            stackPanel.Children.Add(nameTextBlock);
+            stackPanel.Children.Add(numberTextBlock);
             stackPanel.Children.Add(button);
 
             grid.Children.Add(stackPanel);
@@ -434,19 +435,27 @@ namespace WpfApp7
         private void SaveHallButton_Click(object sender, RoutedEventArgs e)
         {
             StringBuilder errors = new StringBuilder();
-            if (tableCoordinatesList == null | tableCoordinatesList.Count == 0 )
+            if (tableCoordinatesList.Count == 0)
             {
                 errors.AppendLine("Необходимо добавить хотя бы один стол");
             }
-            for (int i = 0; i < tableCoordinatesList.Count; i++)
+            else
             {
-                var f = databaseEntities.ЗалСтол.Where(x => x.КодСтола.Equals(tableCoordinatesList[i].Number)).ToList().ToList();
-                for (int q = 0; q < f.Count; q++)
+                var activeHallsList = databaseEntities.Зал.Where(x => x.Статус.Equals(true)).ToList();
+                List<Стол> inaccessibleTableList = new List<Стол>();
+
+                for (int i = 0; i < activeHallsList.Count; i++)
                 {
-                    var a = databaseEntities.Зал.Where(x => x.Код.Equals(f[i])).Where(x => x.Статус.Equals(true)).FirstOrDefault();
-                    if(a != null)
+                    var tableActiveHalls = databaseEntities.ЗалСтол.ToList().Where(x => x.КодЗала.Equals(activeHallsList[i].Код)).ToList();
+                    for (int q = 0; q < tableActiveHalls.Count; q++)
                     {
-                        errors.AppendLine("Один или несколько столов добавлены в активном зале");
+                        var inaccessibleTable = addedTables.Where(x => x.Код.Equals(tableActiveHalls[q].КодСтола)).Except(inaccessibleTableList).FirstOrDefault();
+
+                        if (inaccessibleTable != null)
+                        {
+                            inaccessibleTableList.Add(inaccessibleTable);
+                            errors.AppendLine($"{activeHallsList[i].Наименование} сейчас активен и содержит стол {inaccessibleTable.Наименование}");
+                        }
                     }
                 }
             }
@@ -458,7 +467,7 @@ namespace WpfApp7
             databaseEntities.Зал.Add(new Зал
             {
                 Код = databaseEntities.Зал.Count(),
-                Наименование = "Тестовый зал",
+                Наименование = NameHallTextBox.Text,
                 Статус = true
             });
 
@@ -487,16 +496,15 @@ namespace WpfApp7
         {
             FilterTables();
 
-            if (TableTypeComboBox.SelectedIndex > 1)
-            {
-                TiltAngleStackPanel.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                TiltAngleStackPanel.Visibility = Visibility.Collapsed;
-            }
-
-
+            //if (TableTypeComboBox.SelectedIndex > 1)
+            //{
+            //    TiltAngleCheckBox.IsEnabled = true;
+            //}
+            //else
+            //{
+            //    TiltAngleCheckBox.IsEnabled = false;
+            //    TiltAngleCheckBox.IsChecked = false; 
+            //}
         }
         private void FilterTables()
         {
@@ -515,6 +523,17 @@ namespace WpfApp7
             TableComboBox.SelectedIndex = 0;
         }
 
+        private void ViewHallButton_Click(object sender, RoutedEventArgs e)
+        {
+            HallWindow hallWindow = new HallWindow();
+            hallWindow.Show();
+        }
+
+        private void ChangeTableButton_Click(object sender, RoutedEventArgs e)
+        {
+            TableWindow tableWindow = new TableWindow();
+            tableWindow.Show();
+        }
     }
 }
 
